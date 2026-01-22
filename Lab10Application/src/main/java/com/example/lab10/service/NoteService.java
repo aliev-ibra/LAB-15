@@ -9,7 +9,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,20 +30,19 @@ public class NoteService {
                 .orElseThrow(() -> new RuntimeException("Current user not found"));
     }
 
-    @Transactional
-    public Note createNote(NoteDTO noteDTO) {
+    public void createNote(NoteDTO noteDTO) {
         User user = getCurrentUser();
         Note note = new Note();
         note.setTitle(noteDTO.getTitle());
         note.setContent(noteDTO.getContent());
         note.setCreatedAt(LocalDateTime.now());
-        note.setUser(user);
-        return noteRepository.save(note);
+        note.setUserId(user.getId());
+        noteRepository.save(note);
     }
 
     public List<Note> getMyNotes() {
         User user = getCurrentUser();
-        return noteRepository.findNotesByUserIdRaw(user.getId());
+        return noteRepository.findByUserId(user.getId());
     }
 
     public Note getNoteById(Long id) {
@@ -52,23 +50,21 @@ public class NoteService {
                 .orElseThrow(() -> new RuntimeException("Note not found"));
         
         User currentUser = getCurrentUser();
-        if (!note.getUser().getId().equals(currentUser.getId())) {
+        if (!note.getUserId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You do not have permission to access this note");
         }
         return note;
     }
 
-    @Transactional
-    public Note updateNote(Long id, NoteDTO noteDTO) {
+    public void updateNote(Long id, NoteDTO noteDTO) {
         Note note = getNoteById(id); // Checks ownership
         note.setTitle(noteDTO.getTitle());
         note.setContent(noteDTO.getContent());
-        return noteRepository.save(note);
+        noteRepository.save(note);
     }
 
-    @Transactional
     public void deleteNote(Long id) {
         Note note = getNoteById(id); // Checks ownership
-        noteRepository.delete(note);
+        noteRepository.deleteById(note.getId());
     }
 }

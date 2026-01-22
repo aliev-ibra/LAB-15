@@ -1,0 +1,81 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.example:lab10 >--------------------------
+[INFO] Building lab10 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.0:clean (default-clean) @ lab10 ---
+[INFO] Deleting C:\Users\aliye\Downloads\lab15\Lab10Application\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ lab10 ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 9 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ lab10 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 19 source files with javac [debug parameters release 21] to target\classes
+[INFO] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[29,50] incompatible types: void cannot be converted to com.example.lab10.model.User
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[35,27] cannot find symbol
+  symbol:   method findAll()
+  location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[40,27] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[52,43] cannot find symbol
+  symbol:   method updateUser(java.lang.Long,com.example.lab10.model.User)
+  location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[63,44] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[80,43] cannot find symbol
+  symbol:   method updateUser(java.lang.Long,com.example.lab10.model.User)
+  location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[90,24] cannot find symbol
+  symbol:   method deleteUser(java.lang.Long)
+  location: variable userService of type com.example.lab10.service.UserService
+[INFO] 7 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.833 s
+[INFO] Finished at: 2026-01-22T22:55:17+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile (default-compile) on project lab10: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[29,50] incompatible types: void cannot be converted to com.example.lab10.model.User
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[35,27] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[40,27] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[52,43] cannot find symbol
+[ERROR]   symbol:   method updateUser(java.lang.Long,com.example.lab10.model.User)
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[63,44] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[80,43] cannot find symbol
+[ERROR]   symbol:   method updateUser(java.lang.Long,com.example.lab10.model.User)
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] /C:/Users/aliye/Downloads/lab15/Lab10Application/src/main/java/com/example/lab10/controller/UserController.java:[90,24] cannot find symbol
+[ERROR]   symbol:   method deleteUser(java.lang.Long)
+[ERROR]   location: variable userService of type com.example.lab10.service.UserService
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

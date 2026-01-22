@@ -1,66 +1,54 @@
 package com.example.lab10.controller;
 
-import com.example.lab10.dto.AuthResponse;
-import com.example.lab10.dto.LoginRequest;
 import com.example.lab10.dto.UserDTO;
 import com.example.lab10.model.User;
-import com.example.lab10.security.JwtService;
 import com.example.lab10.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/auth")
+@Controller
 public class AuthController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService, UserDetailsService userDetailsService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String registerPage(Model model) {
+        model.addAttribute("user", new UserDTO());
+        return "register";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserDTO userDTO) {
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-        
-        // Default role is set in entity, or we can set it here
-        // user.setRole("ROLE_USER");
-        
-        userService.createUser(user);
-        
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        String token = jwtService.generateToken(userDetails);
-        
-        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.CREATED);
-    }
+    public String register(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println("AuthController: Validation errors during registration:");
+            result.getAllErrors().forEach(error -> System.out.println(error.toString()));
+            return "register";
+        }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = jwtService.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthResponse(token));
+        try {
+            User user = new User();
+            user.setUsername(userDTO.getUsername());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            userService.createUser(user);
+        } catch (Exception e) {
+            return "redirect:/register?error";
+        }
+        
+        return "redirect:/login";
     }
 }

@@ -1,17 +1,17 @@
 package com.example.lab10.controller;
 
 import com.example.lab10.dto.NoteDTO;
-import com.example.lab10.model.Note;
 import com.example.lab10.service.NoteService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/notes")
+@Controller
 public class NoteController {
 
     private final NoteService noteService;
@@ -20,29 +20,23 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping
-    public ResponseEntity<Note> createNote(@Valid @RequestBody NoteDTO noteDTO) {
-        return new ResponseEntity<>(noteService.createNote(noteDTO), HttpStatus.CREATED);
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("username", auth.getName());
+        model.addAttribute("notes", noteService.getMyNotes());
+        return "dashboard";
     }
 
-    @GetMapping
-    public ResponseEntity<List<Note>> getMyNotes() {
-        return ResponseEntity.ok(noteService.getMyNotes());
+    @PostMapping("/dashboard")
+    public String createNote(@ModelAttribute NoteDTO noteDTO) {
+        noteService.createNote(noteDTO);
+        return "redirect:/dashboard";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
-        return ResponseEntity.ok(noteService.getNoteById(id));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Note> updateNote(@PathVariable Long id, @Valid @RequestBody NoteDTO noteDTO) {
-        return ResponseEntity.ok(noteService.updateNote(id, noteDTO));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
+    @PostMapping("/dashboard/delete/{id}")
+    public String deleteNote(@PathVariable Long id) {
         noteService.deleteNote(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/dashboard";
     }
 }
