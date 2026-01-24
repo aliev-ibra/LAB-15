@@ -42,13 +42,14 @@ public class NoteRepository {
             String sql = "INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?)";
             jdbcTemplate.update(sql, note.getTitle(), note.getContent(), note.getUserId());
         } else {
-            String sql = "UPDATE notes SET title = ?, content = ? WHERE id = ?";
-            jdbcTemplate.update(sql, note.getTitle(), note.getContent(), note.getId());
+            // Update yalnız həmin istifadəçiyə aid qeydlər üçün işləyir
+            String sql = "UPDATE notes SET title = ?, content = ? WHERE id = ? AND user_id = ?";
+            jdbcTemplate.update(sql, note.getTitle(), note.getContent(), note.getId(), note.getUserId());
         }
     }
 
-    public void deleteById(Long id) {
-        String sql = "DELETE FROM notes WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+    public void deleteByIdAndUserId(Long id, Long userId) {
+        String sql = "DELETE FROM notes WHERE id = ? AND user_id = ?";
+        jdbcTemplate.update(sql, id, userId);
     }
 }

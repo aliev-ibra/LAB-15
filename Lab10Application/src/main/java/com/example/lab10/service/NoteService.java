@@ -25,7 +25,8 @@ public class NoteService {
     }
 
     private User getCurrentUser() {
-        String email = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String email = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getUsername();
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Current user not found"));
     }
@@ -48,7 +49,7 @@ public class NoteService {
     public Note getNoteById(Long id) {
         Note note = noteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
-        
+
         User currentUser = getCurrentUser();
         if (!note.getUserId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You do not have permission to access this note");
@@ -65,6 +66,6 @@ public class NoteService {
 
     public void deleteNote(Long id) {
         Note note = getNoteById(id); // Checks ownership
-        noteRepository.deleteById(note.getId());
+        noteRepository.deleteByIdAndUserId(note.getId(), note.getUserId());
     }
 }

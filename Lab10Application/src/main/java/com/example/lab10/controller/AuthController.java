@@ -31,11 +31,12 @@ public class AuthController {
         return "register";
     }
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
+
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println("AuthController: Validation errors during registration:");
-            result.getAllErrors().forEach(error -> System.out.println(error.toString()));
+            logger.warn("Validation failed during registration for user: {}", userDTO.getEmail());
             return "register";
         }
 
@@ -48,7 +49,7 @@ public class AuthController {
         } catch (Exception e) {
             return "redirect:/register?error";
         }
-        
+
         return "redirect:/login";
     }
 }

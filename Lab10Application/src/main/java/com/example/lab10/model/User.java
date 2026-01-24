@@ -10,5 +10,6 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String role = "ROLE_USER"; 
+    private String role = "ROLE_USER";
+    private String details; // Bura JSON formatında data yığılacaq: {"city":"Baku", "phone":"12345"}
 }

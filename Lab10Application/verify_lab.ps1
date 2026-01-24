@@ -1,4 +1,4 @@
-$baseUrl = "http://localhost:8082"
+$baseUrl = "http://localhost:8080"
 $randomInt = Get-Random -Minimum 10000 -Maximum 99999
 
 function Test-Request {

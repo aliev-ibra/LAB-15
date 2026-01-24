@@ -16,16 +16,19 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CustomUserDetailsService.class);
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("CustomUserDetailsService: Attempting to load user: " + email);
+        logger.info("CustomUserDetailsService: Load request received for email: {}", email);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    System.out.println("CustomUserDetailsService: User not found: " + email);
-                    return new UsernameNotFoundException("User not found with email: " + email);
+                    logger.warn("CustomUserDetailsService: Authentication failed - User record missing for email: {}",
+                            email);
+                    return new UsernameNotFoundException("Invalid credentials.");
                 });
 
-        System.out.println("CustomUserDetailsService: User found: " + user.getEmail() + ", Role: " + user.getRole());
+        logger.info("CustomUserDetailsService: User identity verified and authorities mapped for user: {}", email);
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail()) // Use email as username
                 .password(user.getPassword())
